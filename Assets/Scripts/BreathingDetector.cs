@@ -4,14 +4,22 @@ using UnityEngine;
 public class BreathingDetector : MonoBehaviour
 {
     // 公共变量
-    public float distance = 0f;                 // 当前距离（由外部更新）
-    public float movementThreshold = 0.1f;      // 呼吸动作阈值
-    public float minBreathTime = 5f;           // 呼吸过快阈值
-    public float maxBreathTime = 30f;          // 呼吸过慢阈值
-    public int maxBreaths = 3;                 // 记录最近 X 次呼吸
-    public float sampleRate = 10f;              // HZ
+    public float Distance = 0f;                 // 当前距离（由外部更新）
+    public float MovementThreshold = 0.1f;      // 呼吸动作阈值
+    public float MinBreathTime = 5f;            // 呼吸过快阈值
+    public float MaxBreathTime = 30f;           // 呼吸过慢阈值
+    public int MaxBreaths = 3;                  // 记录最近 X 次呼吸
+    public int UnstableTolerance = 5;
+    
+    public float ProtectionDuration = 5f;
+    private int unstableCount = 0;
+    private float protectionTime = 0f; // = unstableCount * ProtectionDuration
+    
+    private int unstableToleranceCount = 0;
+    public float SampleRate = 10f;              // 采样频率（Hz）
     private float sampleInterval;
     public GameObject Mushroom;
+    public GameObject Tree;
 
     // 呼吸状态
     public enum BreathingState { Inhaling, Exhaling, Holding }
@@ -19,13 +27,13 @@ public class BreathingDetector : MonoBehaviour
 
     // 采样相关
     private float prevDistance = 0f;
-    private bool isIncreasing = false;
+    // private bool isIncreasing = false;
 
     // 呼吸计时
     private float breathStartTime = 0f;        
     private List<float> breathTimestamps = new List<float>();
     private bool lastBreathStable = true;
-    private int totalBreathing = 0;
+    private int totalBreaths = 0;
 
     // ======= 对外接口 =======
 
@@ -44,39 +52,48 @@ public class BreathingDetector : MonoBehaviour
     public bool GetLastBreathStability() => lastBreathStable;
 
     // 获取呼吸总次数
-    public int GetBreathingCount() => totalBreathing;
+    public int GetBreathingCount() => totalBreaths;
 
     // 重置呼吸总次数
-    public void ResetBreathingCount() => totalBreathing = 0;
+    public void ResetBreathingCount() => totalBreaths = 0;
+
+    public void Reset()
+    {
+        prevDistance = Distance;
+        breathStartTime = Time.time;
+        sampleInterval = 1f / SampleRate;
+        unstableToleranceCount = 0;
+    }
 
     // ======= Unity 入口 =======
     void Start()
     {
-        prevDistance = distance;
-        breathStartTime = Time.time;
-        sampleInterval = 1f / sampleRate;;
+        Reset();
     }
 
     void Update()
-    {
+    {                
+        protectionTime -= Time.deltaTime;
         sampleInterval -= Time.deltaTime;
         if (sampleInterval > 0f)
         {
             return;
         }
-        sampleInterval = 1f / sampleRate;
-        float deltaDistance = distance - prevDistance;
-        prevDistance = distance;
+        sampleInterval = 1f / SampleRate;
+        float deltaDistance = Distance - prevDistance;
+        prevDistance = Distance;
 
         // 根据距离变化判断呼吸方向
-        if (deltaDistance > movementThreshold && !isIncreasing)
+        // if (deltaDistance > MovementThreshold && !isIncreasing)
+        if (deltaDistance > MovementThreshold && currentState != BreathingState.Inhaling)
         {
-            isIncreasing = true;
+            // isIncreasing = true;
             OnBreathPhaseChange(BreathingState.Inhaling);
         }
-        else if (deltaDistance < -movementThreshold && isIncreasing)
+        // else if (deltaDistance < -MovementThreshold && isIncreasing)
+        else if (deltaDistance < -MovementThreshold && currentState != BreathingState.Exhaling)
         {
-            isIncreasing = false;
+            // isIncreasing = false;
             OnBreathPhaseChange(BreathingState.Exhaling);
         }
     }
@@ -93,10 +110,10 @@ public class BreathingDetector : MonoBehaviour
         if (newState == BreathingState.Exhaling)
         {
             breathTimestamps.Add(Time.time);
-            if (breathTimestamps.Count > maxBreaths)
+            if (breathTimestamps.Count > MaxBreaths)
                 breathTimestamps.RemoveAt(0);
 
-            totalBreathing++;
+            totalBreaths++;
         }
 
         currentState = newState;
@@ -105,29 +122,45 @@ public class BreathingDetector : MonoBehaviour
 
     private void CheckStability(float duration)
     {
-        if (duration < minBreathTime)
-        {
-            lastBreathStable = false;
-            ToFast();
-        }
-        else if (duration > maxBreathTime)
-        {
-            lastBreathStable = false;
-            ToSlow();
-        }
-        else
+        if (duration >= MinBreathTime && duration <= MaxBreathTime)
         {
             lastBreathStable = true;
         }
+        else
+        {
+            if (protectionTime > 0)
+            {
+                return;
+            }
+            unstableToleranceCount += 1;
+            if (unstableToleranceCount >= UnstableTolerance)
+            {
+                Mushroom.GetComponent<MushroomController>().Reset();
+                Tree.GetComponent<DropController>().Reset();
+                unstableCount += 1;
+                protectionTime = unstableCount * ProtectionDuration;
+                Reset();
+            }
+            if (duration < MinBreathTime)
+            {
+                lastBreathStable = false;
+                OnBreathingTooFast();
+            }
+            else if (duration > MaxBreathTime)
+            {
+                lastBreathStable = false;
+                OnBreathingTooSlow();
+            }
+        }
     }
 
-    private void ToSlow()
+    private void OnBreathingTooSlow()
     {
         float scale = Mushroom.GetComponent<MushroomController>().GetTargetScale();
         Mushroom.GetComponent<MushroomController>().SetTargetScale(scale - 0.5f);
     }
 
-    private void ToFast()
+    private void OnBreathingTooFast()
     {
         float scale = Mushroom.GetComponent<MushroomController>().GetTargetScale();
         Mushroom.GetComponent<MushroomController>().SetTargetScale(scale + 0.5f);

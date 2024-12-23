@@ -17,7 +17,7 @@ public class DropController : MonoBehaviour
     public int SkyboxAmount = 14;
     public int _dropCount = 0;
 
-    void Reset()
+    public void Reset()
     {
         _dropCount = 0;
         _dropTimer = 0;
