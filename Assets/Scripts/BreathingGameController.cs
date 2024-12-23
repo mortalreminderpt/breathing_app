@@ -8,7 +8,6 @@ using UnityEngine.Video;
 public class BreathingGameController : MonoBehaviour
 {
     public int currentStage = 0;
-    public int breathCount = 0;
     public int preStateCount = 10;
     public int state1Count = 10;
     public int state2Count = 15;
@@ -16,6 +15,8 @@ public class BreathingGameController : MonoBehaviour
 
     public GameObject[] state2List;
     public GameObject[] state3List;
+
+    public BreathingDetector breathingDetector;
 
 
     public AudioClip waterDropSound;
@@ -30,16 +31,13 @@ public class BreathingGameController : MonoBehaviour
     public AudioClip guideAudioS4;
     private bool isWatchingVideo;
     public GameObject GuideAudioController;
-
-    private float breathTimer = 0f;
-    public float breathDuration = 5f; // 吸气4秒+保持4秒+呼气4秒+保持4秒
-
+    
     public Animator MushroomAnimator;
 
     public Animator DropAnimator;
 
     public Animator State4DropAnimator;
-    
+
     //public UDPReceiver udpReceiver;
     private float previousIntensity = 0f;
 
@@ -51,10 +49,12 @@ public class BreathingGameController : MonoBehaviour
 
     public Slider ProgressSlider;
 
+    private int numUnstable = 0;
+    private int numBreathing = 0;
+
     void Update()
     {
         if (!isStart) return;
-        
         switch (currentStage)
         {
             case 0:
@@ -73,12 +73,32 @@ public class BreathingGameController : MonoBehaviour
                 HandleMushroomShake();
                 break;
         }
-        curStateTxt.text ="stage:" + currentStage ;
-        breathCountTxt.text = "breath count:"+breathCount;
-        breathTxt.text = "breath timer:"+breathTimer;
+
+        if (currentStage != 0)
+        {
+            if (breathingDetector.GetLastBreathStability() == false && breathingDetector.GetBreathingCount() != numBreathing)
+            {
+                numUnstable += 1;
+                Debug.Log("第" + numUnstable + "次不稳定");
+                if (numUnstable < 3)
+                {
+                    // if (GuideAudioController.activeSelf == false) 
+                    GuideAudioController.SetActive(false);
+                    GuideAudioController.SetActive(true);
+                }
+                else
+                {
+                    currentStage = 1;
+                }
+            }
+        }
         
-        ProgressSlider.maxValue = breathDuration;
-        ProgressSlider.value = breathTimer;
+        numBreathing = breathingDetector.GetBreathingCount();
+        curStateTxt.text = "stage:" + currentStage;
+        breathCountTxt.text = "breath count:" + breathingDetector.GetBreathingCount();
+        breathTxt.text = "breath timer:" + breathingDetector.GetAverageBreathRate();
+        ProgressSlider.maxValue = 10;
+        ProgressSlider.value = breathingDetector.GetAverageBreathRate();
     }
 
     public void StartGame()
@@ -100,7 +120,6 @@ public class BreathingGameController : MonoBehaviour
         }
     }
 
-    
 
     private void OnVideoFinished(VideoPlayer vp)
     {
@@ -115,79 +134,61 @@ public class BreathingGameController : MonoBehaviour
     {
         isStart = false;
     }
+
     void HandleBreathingTraining()
     {
-        breathTimer += Time.deltaTime;
-        if (breathTimer >= breathDuration)
+        if (GuideAudioController.activeSelf == false) GuideAudioController.SetActive(true);
+
+
+        // breathCount++;
+        CreateWaterDrop();
+        if (breathingDetector.GetBreathingCount() >= preStateCount)
         {
-            breathTimer = 0f;
-            breathCount++;
-            CreateWaterDrop();
-            if (breathCount >= preStateCount)
-            {
-                currentStage = 2;
-                breathCount = 0;
-                breathTimer = 0;
-            }
+            currentStage = 2;
+            breathingDetector.ResetBreathingCount();
         }
     }
 
     void HandleWaterDropFormation()
     {
-        if(GuideAudioController.activeSelf == false) GuideAudioController.SetActive(true);
-        breathTimer += Time.deltaTime;
-        if (breathTimer >= breathDuration)
+        // if(GuideAudioController.activeSelf == false) GuideAudioController.SetActive(true);
+        // breathCount++;
+        CreateWaterDrop();
+        if (breathingDetector.GetBreathingCount() >= state1Count)
         {
-            breathTimer = 0f;
-            breathCount++;
-            CreateWaterDrop();
-            if (breathCount >= state1Count)
-            {
-                currentStage = 3;
-                breathCount = 0;
-                breathTimer = 0;
-            }
+            currentStage = 3;
+            breathingDetector.ResetBreathingCount();
         }
     }
 
     void HandleMushroomGrowth()
     {
-        breathTimer += Time.deltaTime;
-        if (breathTimer >= breathDuration)
+        // breathCount++;
+        if (breathingDetector.GetBreathingCount() >= state2Count)
         {
-            breathTimer = 0f;
-            breathCount++;
-            if (breathCount >= state2Count)
-            {
-                ActiveGameObjectList(state2List, false);
-                ActiveGameObjectList(state3List, true);
-                MushroomAnimator.Play("Grow");
-                currentStage = 4;
-                breathCount = 0;
-                breathTimer = 0;
-                GuideAudioController.SetActive(false);
-            }
-            else
-            {
-                CreateWaterDrop();
-            }
+            ActiveGameObjectList(state2List, false);
+            ActiveGameObjectList(state3List, true);
+            MushroomAnimator.Play("Grow");
+            currentStage = 4;
+            breathingDetector.ResetBreathingCount();
+
+            GuideAudioController.SetActive(false);
+        }
+        else
+        {
+            CreateWaterDrop();
         }
     }
 
 
     void HandleMushroomShake()
     {
-        breathTimer += Time.deltaTime;
-        if (breathTimer >= breathDuration)
+        // breathCount++;
+        // ShakeMushroom();
+        // State4WaterDrop();
+        if (breathingDetector.GetBreathingCount() >= state3Count)
         {
-            breathTimer = 0f;
-            breathCount++;
-            // ShakeMushroom();
-            State4WaterDrop();
-            if (breathCount >= state3Count)
-            {
-                Debug.Log("Game Finished!");
-            }
+            Debug.Log("Game Finished!");
         }
     }
 
@@ -201,9 +202,9 @@ public class BreathingGameController : MonoBehaviour
 
     void CreateWaterDrop()
     {
-        DropAnimator.SetTrigger("Drop");
-        mushroomAS.clip = waterDropSound;
-        mushroomAS.Play();
+        // DropAnimator.SetTrigger("Drop");
+        // mushroomAS.clip = waterDropSound;
+        // mushroomAS.Play();
     }
 
     void GrowMushroom(float progress)
@@ -213,8 +214,8 @@ public class BreathingGameController : MonoBehaviour
         // mushroomAS.clip = mushroomGrowSound;
         // mushroomAS.Play();
     }
-    
-    
+
+
     void ActiveGameObjectList(GameObject[] list, bool active)
     {
         for (int i = 0; i < list.Length; i++)
@@ -229,5 +230,4 @@ public class BreathingGameController : MonoBehaviour
         // mushroom.GetComponent<Animator>().SetTrigger("Shake");
         // mushroomShakeSound.Play();
     }
-    
 }
