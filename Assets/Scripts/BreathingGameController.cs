@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.Video;
+using UnityEngine.SceneManagement;
 
 public class BreathingGameController : MonoBehaviour
 {
@@ -41,13 +43,15 @@ public class BreathingGameController : MonoBehaviour
     //public UDPReceiver udpReceiver;
     private float previousIntensity = 0f;
 
-    private bool isStart = false;
+    public bool isStart = false;
 
     public TextMeshProUGUI breathTxt;
     public TextMeshProUGUI curStateTxt;
     public TextMeshProUGUI breathCountTxt;
 
     public Slider ProgressSlider;
+    
+    public UnityEvent onGuideFinished;
 
     private int numUnstable = 0;
     private int numBreathing = 0;
@@ -126,6 +130,7 @@ public class BreathingGameController : MonoBehaviour
         Debug.Log("视频播放完毕！");
         // 在这里执行你想要的行为
         isWatchingVideo = false;
+        LoadScene("Stage2Scene");
         currentStage = 1;
         guideVideoS1.SetActive(false);
     }
@@ -229,5 +234,10 @@ public class BreathingGameController : MonoBehaviour
         MushroomAnimator.Play("DropNew");
         // mushroom.GetComponent<Animator>().SetTrigger("Shake");
         // mushroomShakeSound.Play();
+    }
+    
+    public void LoadScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
     }
 }

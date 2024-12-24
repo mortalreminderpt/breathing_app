@@ -36,8 +36,8 @@ public class MushroomController : MonoBehaviour
 
     public void Reset()
     {
-        this.gameObject.transform.position = _presetPosition;
-        this.gameObject.transform.localScale = _presetLocalScale;
+        gameObject.transform.position = _presetPosition;
+        gameObject.transform.localScale = _presetLocalScale;
         _currentScale = 1f;
         _targetScale = 1f;
     }
@@ -60,6 +60,18 @@ public class MushroomController : MonoBehaviour
         // _targetScale = targetScale;
     }
 
+    public void MultiplyBy(float multiplier)
+    {
+        float scale = GetTargetScale();
+        SetTargetScale(scale * multiplier);
+    }
+
+    public void AddBy(float addAmount)
+    {
+        float scale = GetTargetScale();
+        SetTargetScale(scale + addAmount);
+    }
+    
     public float GetTargetScale()
     {
         return _targetScale;

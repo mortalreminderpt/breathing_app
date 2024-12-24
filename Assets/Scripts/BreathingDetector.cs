@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BreathingDetector : MonoBehaviour
 {
@@ -18,8 +19,6 @@ public class BreathingDetector : MonoBehaviour
     private int unstableToleranceCount = 0;
     public float SampleRate = 10f;              // 采样频率（Hz）
     private float sampleInterval;
-    public GameObject Mushroom;
-    public GameObject Tree;
 
     // 呼吸状态
     public enum BreathingState { Inhaling, Exhaling, Holding }
@@ -34,6 +33,12 @@ public class BreathingDetector : MonoBehaviour
     private List<float> breathTimestamps = new List<float>();
     private bool lastBreathStable = true;
     private int totalBreaths = 0;
+    
+    public UnityEvent OnBreathingTooSlow;
+    public UnityEvent OnBreathingTooFast;
+    public UnityEvent OnUnstableRegular;
+    public UnityEvent OnUnstableTolerance;
+
 
     // ======= 对外接口 =======
 
@@ -132,37 +137,27 @@ public class BreathingDetector : MonoBehaviour
             {
                 return;
             }
+            OnUnstableRegular.Invoke();
             unstableToleranceCount += 1;
             if (unstableToleranceCount >= UnstableTolerance)
             {
-                Mushroom.GetComponent<MushroomController>().Reset();
-                Tree.GetComponent<DropController>().Reset();
                 unstableCount += 1;
                 protectionTime = unstableCount * ProtectionDuration;
-                Reset();
+                OnUnstableTolerance.Invoke();
+                // Mushroom.GetComponent<MushroomController>().Reset();
+                // Tree.GetComponent<DropController>().Reset();
+                // Reset();
             }
             if (duration < MinBreathTime)
             {
                 lastBreathStable = false;
-                OnBreathingTooFast();
+                OnBreathingTooFast.Invoke();
             }
             else if (duration > MaxBreathTime)
             {
                 lastBreathStable = false;
-                OnBreathingTooSlow();
+                OnBreathingTooSlow.Invoke();
             }
         }
-    }
-
-    private void OnBreathingTooSlow()
-    {
-        float scale = Mushroom.GetComponent<MushroomController>().GetTargetScale();
-        Mushroom.GetComponent<MushroomController>().SetTargetScale(scale - 0.5f);
-    }
-
-    private void OnBreathingTooFast()
-    {
-        float scale = Mushroom.GetComponent<MushroomController>().GetTargetScale();
-        Mushroom.GetComponent<MushroomController>().SetTargetScale(scale + 0.5f);
     }
 }

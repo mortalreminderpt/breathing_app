@@ -199,121 +199,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42716890}
   m_CullTransparentMesh: 1
---- !u!1 &75748164
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 75748166}
-  - component: {fileID: 75748165}
-  - component: {fileID: 75748167}
-  m_Layer: 0
-  m_Name: BreathingDetector
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &75748165
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 75748164}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65f6abe59bb77476ab387495ac96893e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Distance: 0
-  MovementThreshold: 1
-  MinBreathTime: 5
-  MaxBreathTime: 30
-  MaxBreaths: 3
-  UnstableTolerance: 5
-  ProtectionDuration: 5
-  SampleRate: 10
-  Mushroom: {fileID: 4157003064626114522}
-  Tree: {fileID: 919132148851856438}
---- !u!4 &75748166
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 75748164}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.9299982, y: 0.9664402, z: -0.11379719}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &75748167
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 75748164}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d81145f56f9414ed7924fabd756c9ec8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  breathingDetector: {fileID: 75748165}
-  updateInterval: 1
---- !u!1 &159438092
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 159438094}
-  - component: {fileID: 159438093}
-  m_Layer: 0
-  m_Name: SkyboxSwitcher
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &159438093
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 159438092}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88eccc58c67bb4f1983fb99572159be0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  daySkybox: {fileID: 2100000, guid: 12ccb828343c3405fb94289774b51aad, type: 2}
-  nightSkybox: {fileID: 2100000, guid: ab675e6698bde46fd87143fb0d7580cb, type: 2}
---- !u!4 &159438094
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 159438092}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.000000014901161, y: 0, z: 0.000000016763806}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &214609726
 Animator:
   serializedVersion: 5
@@ -438,7 +323,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 919132148851856438}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 88b5d9507212343c783bd5c8608631bd, type: 3}
   m_Name: 
@@ -447,9 +332,9 @@ MonoBehaviour:
   mushroomAS: {fileID: 214609728}
   waterDropSound: {fileID: 8300000, guid: c0384381fcf5fe145bb1ac156ced4e48, type: 3}
   Mushroom: {fileID: 4157003064626114522}
-  Skybox: {fileID: 159438092}
+  Skybox: {fileID: 0}
   DropInterval: 2
-  TimeScale: 1
+  TimeScale: 0
   _dropTimer: 0
   SpwanAmount: 2
   GrowAmount: 4
@@ -1166,7 +1051,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!223 &434915645
 Canvas:
   m_ObjectHideFlags: 0
@@ -1230,7 +1115,7 @@ VideoPlayer:
   m_AspectRatio: 2
   m_DataSource: 0
   m_TimeUpdateMode: 2
-  m_PlaybackSpeed: 1
+  m_PlaybackSpeed: 10
   m_AudioOutputMode: 2
   m_TargetAudioSources:
   - {fileID: 0}
@@ -2288,7 +2173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1e046a6b4c2c3c4a8c9fc031f3eb132, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentStage: 1
+  currentStage: 0
   preStateCount: 10
   state1Count: 5
   state2Count: 5
@@ -2297,7 +2182,7 @@ MonoBehaviour:
   - {fileID: 622345632}
   state3List:
   - {fileID: 1440174567}
-  breathingDetector: {fileID: 75748165}
+  breathingDetector: {fileID: 0}
   waterDropSound: {fileID: 8300000, guid: c0384381fcf5fe145bb1ac156ced4e48, type: 3}
   mushroomGrowSound: {fileID: 8300000, guid: cd079d864433aeb428e30f746f68f43c, type: 3}
   mushroomAS: {fileID: 1096533421}
@@ -2310,10 +2195,14 @@ MonoBehaviour:
   MushroomAnimator: {fileID: 214609726}
   DropAnimator: {fileID: 622345634}
   State4DropAnimator: {fileID: 289173492}
+  isStart: 1
   breathTxt: {fileID: 1277038023}
   curStateTxt: {fileID: 1254263787}
   breathCountTxt: {fileID: 808435879}
   ProgressSlider: {fileID: 1905040294}
+  onGuideFinished:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &1096533420
 Transform:
   m_ObjectHideFlags: 0
@@ -10014,5 +9903,3 @@ SceneRoots:
   - {fileID: 1824991868}
   - {fileID: 1096533420}
   - {fileID: 390010652}
-  - {fileID: 75748166}
-  - {fileID: 159438094}
