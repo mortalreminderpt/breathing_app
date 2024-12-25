@@ -20,7 +20,7 @@ public class MushroomController : MonoBehaviour
     
     void Start()
     {
-        _presetPosition = PresetTransform.position;
+        _presetPosition = PresetTransform.localPosition;
         _presetLocalScale = PresetTransform.localScale;
     }
 
@@ -32,11 +32,12 @@ public class MushroomController : MonoBehaviour
             _currentScale = _targetScale;
         }
         this.transform.localScale = _presetLocalScale * _currentScale;
+        // this.gameObject.transform.localPosition = FinalPosition;
     }
 
     public void Reset()
     {
-        gameObject.transform.position = _presetPosition;
+        gameObject.transform.localPosition = _presetPosition;
         gameObject.transform.localScale = _presetLocalScale;
         _currentScale = 1f;
         _targetScale = 1f;
@@ -44,13 +45,13 @@ public class MushroomController : MonoBehaviour
 
     public void ToSmall()
     {
-        this.gameObject.transform.position = FinalPosition;
+        this.gameObject.transform.localPosition = FinalPosition;
         SetTargetScale(SmallScale);
     }
 
     public void ToBig()
     {
-        this.gameObject.transform.position = FinalPosition;
+        this.gameObject.transform.localPosition = FinalPosition;
         SetTargetScale(BigScale);
     }
 

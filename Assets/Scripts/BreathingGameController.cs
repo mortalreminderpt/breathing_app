@@ -58,6 +58,13 @@ public class BreathingGameController : MonoBehaviour
 
     void Update()
     {
+        if (OVRInput.GetUp(OVRInput.RawButton.RHandTrigger) 
+            || OVRInput.GetUp(OVRInput.RawButton.LHandTrigger)
+            || Input.GetKeyUp(KeyCode.Return))
+        {
+            OnVideoFinished(null);
+        }
+        
         if (!isStart) return;
         switch (currentStage)
         {
@@ -130,7 +137,8 @@ public class BreathingGameController : MonoBehaviour
         Debug.Log("视频播放完毕！");
         // 在这里执行你想要的行为
         isWatchingVideo = false;
-        LoadScene("Stage2Scene");
+        // LoadScene("Stage2Scene");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         currentStage = 1;
         guideVideoS1.SetActive(false);
     }
