@@ -7,11 +7,13 @@ using System.Text;
 using System.Threading;
 using UnityEditor;
 using UnityEngine.SceneManagement;
+using Newtonsoft.Json;
+using PimDeWitte.UnityMainThreadDispatcher;
 
 public class TCPClient : MonoBehaviour
 {
     [SerializeField] private string tcpIp = "127.0.0.1"; // 服务器 IP
-    [SerializeField] private int tcpPort = 5555;         // 服务器端口
+    [SerializeField] private int tcpPort = 5555; // 服务器端口
     [SerializeField] private MonoScript componentScript;
     [SerializeField] private List<GameObject> gameObjects = new List<GameObject>();
 
@@ -26,7 +28,7 @@ public class TCPClient : MonoBehaviour
         StartReceiveThread();
         SendMessageToServer("start");
     }
-    
+
     void Awake()
     {
         if (instance != null && instance != this)
@@ -41,9 +43,7 @@ public class TCPClient : MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
     }
 
-  
-  
-  
+
     private void Connect()
     {
         try
@@ -62,9 +62,7 @@ public class TCPClient : MonoBehaviour
         }
     }
 
-  
-  
-  
+
     private void StartReceiveThread()
     {
         if (clientSocket == null)
@@ -75,9 +73,7 @@ public class TCPClient : MonoBehaviour
         receiveThread.Start();
     }
 
-  
-  
-  
+
     private void ReceiveMessages()
     {
         while (isRunning)
@@ -89,7 +85,47 @@ public class TCPClient : MonoBehaviour
                 if (bytesRead > 0)
                 {
                     string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                    Debug.Log($"收到来自服务器的数据: {message}");
+                    float? average = ComputeAverage(message);
+                    UnityMainThreadDispatcher.Instance().Enqueue(() =>
+                    {
+                        if (average.HasValue)
+                        {
+                            foreach (GameObject obj in gameObjects)
+                            {
+                                var detector = obj.GetComponent<BreathingDetector>();
+                                if (detector != null)
+                                {
+                                    detector.Distance = average.Value;
+                                }
+                                else
+                                {
+                                    Debug.LogWarning($"GameObject {obj.name} 没有找到 BreathingDetector 组件。");
+                                }
+                            }
+                            Debug.Log("平均值: " + average.Value);
+                        }
+                        else
+                        {
+                            Debug.Log($"无法解析: {message}");
+                        }
+                        Debug.Log($"收到来自服务器的数据: {message}");
+                    });
+
+                    // if (average.HasValue)
+                    // {
+                    //     // UnityMain
+                    //     
+                    //     foreach (GameObject obj in gameObjects)
+                    //     {
+                    //         obj.GetComponent<BreathingDetector>().Distance = average.Value;
+                    //     }
+                    //     Debug.Log("平均值: " + average.Value);
+                    // }
+                    // else
+                    // {
+                    //     Debug.Log($"无法解析: {message}");
+                    // }
+                    // Debug.Log($"收到来自服务器的数据: {message}");
                 }
             }
             catch (Exception e)
@@ -100,10 +136,7 @@ public class TCPClient : MonoBehaviour
         }
     }
 
-  
-  
-  
-  
+
     public void SendMessageToServer(string message)
     {
         if (clientSocket != null && clientSocket.Connected)
@@ -125,9 +158,7 @@ public class TCPClient : MonoBehaviour
         }
     }
 
-  
-  
-  
+
     private void OnApplicationQuit()
     {
         isRunning = false;
@@ -135,7 +166,7 @@ public class TCPClient : MonoBehaviour
         // 关闭接收线程
         if (receiveThread != null && receiveThread.IsAlive)
         {
-            receiveThread.Abort();  // 注意：Abort() 可能会带来一些问题，生产环境可用更优雅的方式结束线程
+            receiveThread.Abort(); // 注意：Abort() 可能会带来一些问题，生产环境可用更优雅的方式结束线程
         }
 
         // 关闭 Socket
@@ -145,15 +176,16 @@ public class TCPClient : MonoBehaviour
             {
                 clientSocket.Shutdown(SocketShutdown.Both);
             }
+
             clientSocket.Close();
         }
     }
-    
+
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         FindObjects();
     }
-    
+
     private void FindObjects()
     {
         gameObjects = new List<GameObject>();
@@ -177,6 +209,7 @@ public class TCPClient : MonoBehaviour
             Debug.Log("场景中没有找到此类型的任何组件");
             return;
         }
+
         foreach (var comp in foundComponents)
         {
             if (comp != null)
@@ -184,5 +217,57 @@ public class TCPClient : MonoBehaviour
                 gameObjects.Add(comp.gameObject);
             }
         }
+    }
+    
+    
+    public float? ComputeAverage(string json)
+    {
+        try
+        {
+            // 反序列化JSON到RootObject
+            RootObject root = JsonConvert.DeserializeObject<RootObject>(json);
+            if (root == null)
+                return null;
+
+            // 检查returnCode是否为0
+            if (root.returnCode != 0 || root.returnData == null)
+                return null;
+
+            float sum = 0f;
+            int count = 0;
+
+            // 遍历returnData中的所有键
+            foreach (KeyValuePair<string, List<List<float>>> entry in root.returnData)
+            {
+                List<List<float>> dataList = entry.Value;
+                foreach (List<float> subArray in dataList)
+                {
+                    if (subArray.Count < 3)
+                        return null; // 子数组元素不足
+
+                    sum += subArray[2];
+                    count++;
+                }
+            }
+
+            if (count == 0)
+                return null;
+
+            // 计算平均值
+            float average = sum / count;
+            return average;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("解析JSON时发生错误: " + ex.Message);
+            return null;
+        }
+    }
+
+    [Serializable]
+    public class RootObject
+    {
+        public int returnCode;
+        public Dictionary<string, List<List<float>>> returnData;
     }
 }
