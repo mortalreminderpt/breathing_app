@@ -18,8 +18,7 @@ public class BreathingDetector : MonoBehaviour
     private float protectionTime = 0f; // = unstableCount * ProtectionDuration
     
     public int unstableToleranceCount = 0;
-    public float SampleRate = 10f;              // 采样频率（Hz）
-    private float sampleInterval;
+    // public float SampleRate = 10f;              // 采样频率（Hz）
 
     // 呼吸状态
     public enum BreathingState { Inhaling, Exhaling, Holding }
@@ -31,7 +30,7 @@ public class BreathingDetector : MonoBehaviour
 
     // 呼吸计时
     private float breathStartTime = 0f;        
-    private List<float> breathTimestamps = new List<float>();
+    public List<float> breathTimestamps = new List<float>();
     private bool lastBreathStable = true;
     private int totalBreaths = 0;
     
@@ -67,8 +66,8 @@ public class BreathingDetector : MonoBehaviour
     {
         prevDistance = Distance;
         breathStartTime = Time.time;
-        sampleInterval = 1f / SampleRate;
         unstableToleranceCount = 0;
+        currentState=BreathingState.Holding;
     }
 
     // ======= Unity 入口 =======
@@ -80,12 +79,6 @@ public class BreathingDetector : MonoBehaviour
     void Update()
     {                
         protectionTime -= Time.deltaTime;
-        sampleInterval -= Time.deltaTime;
-        if (sampleInterval > 0f)
-        {
-            return;
-        }
-        sampleInterval = 1f / SampleRate;
         float deltaDistance = Distance; // - prevDistance;
 
         // 根据距离变化判断呼吸方向
@@ -113,13 +106,15 @@ public class BreathingDetector : MonoBehaviour
         // 检测上一个阶段（Inhaling或Exhaling或Holding）的时长是否稳定
         CheckStability(phaseTime);
 
+        breathTimestamps.Add(phaseTime);
+        if (breathTimestamps.Count > MaxBreaths)
+        {
+            breathTimestamps.RemoveAt(0);
+        }
+
         // 如果本次是从 Inhaling 切到 Exhaling，则表明一次完整呼吸结束
         if (newState == BreathingState.Exhaling)
         {
-            breathTimestamps.Add(Time.time);
-            if (breathTimestamps.Count > MaxBreaths)
-                breathTimestamps.RemoveAt(0);
-
             totalBreaths++;
         }
 
@@ -129,7 +124,11 @@ public class BreathingDetector : MonoBehaviour
 
     private void CheckStability(float duration)
     {
-        if (duration >= MinBreathTime && duration <= MaxBreathTime)
+        if (currentState == BreathingState.Holding)
+        {
+            lastBreathStable = true;
+        }
+        else if (duration >= MinBreathTime && duration <= MaxBreathTime)
         {
             lastBreathStable = true;
         }

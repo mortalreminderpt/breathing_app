@@ -1281,7 +1281,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 014c3ef26237240c0967936fec68b32f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tcpIp: 127.0.0.1
+  tcpIp: 192.168.1.19
   tcpPort: 5555
   componentScript: BreathingDetector
   gameObjects: []
