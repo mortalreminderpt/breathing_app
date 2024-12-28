@@ -93,6 +93,7 @@ public class TCPClient : MonoBehaviour
                             foreach (GameObject obj in gameObjects)
                             {
                                 var detector = obj.GetComponent<BreathingDetector>();
+                                
                                 if (detector != null)
                                 {
                                     detector.Distance = average.Value;

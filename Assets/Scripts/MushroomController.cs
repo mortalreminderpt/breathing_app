@@ -8,8 +8,9 @@ public class MushroomController : MonoBehaviour
     public float SmallScale = 1f;
     public float BigScale = 3f;
     public float ScaleSpeed = 2f;
+    public bool canScale = false;
 
-    public float MaxScale = 5f;
+    public float MaxScale = 4f;
     public float MinScale = 0.5f;
 
     public Transform PresetTransform;
@@ -22,6 +23,7 @@ public class MushroomController : MonoBehaviour
     {
         _presetPosition = PresetTransform.localPosition;
         _presetLocalScale = PresetTransform.localScale;
+        Reset();
     }
 
     void Update()
@@ -41,6 +43,7 @@ public class MushroomController : MonoBehaviour
         gameObject.transform.localScale = _presetLocalScale;
         _currentScale = 1f;
         _targetScale = 1f;
+        canScale = false;
     }
 
     public void ToSmall()
@@ -63,18 +66,29 @@ public class MushroomController : MonoBehaviour
 
     public void MultiplyBy(float multiplier)
     {
-        float scale = GetTargetScale();
-        SetTargetScale(scale * multiplier);
+        if (canScale)
+        {
+            float scale = GetTargetScale();
+            SetTargetScale(scale * multiplier);
+        }
     }
 
     public void AddBy(float addAmount)
     {
-        float scale = GetTargetScale();
-        SetTargetScale(scale + addAmount);
+        if (canScale)
+        {
+            float scale = GetTargetScale();
+            SetTargetScale(scale + addAmount);
+        }
     }
     
     public float GetTargetScale()
     {
         return _targetScale;
+    }
+
+    public void SetCanScale(bool canScale)
+    {
+        this.canScale = canScale;
     }
 }

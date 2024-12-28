@@ -23,7 +23,7 @@ public class BreathingDetector : MonoBehaviour
 
     // 呼吸状态
     public enum BreathingState { Inhaling, Exhaling, Holding }
-    private BreathingState currentState = BreathingState.Holding;
+    public BreathingState currentState = BreathingState.Holding;
 
     // 采样相关
     private float prevDistance = 0f;
@@ -86,7 +86,7 @@ public class BreathingDetector : MonoBehaviour
             return;
         }
         sampleInterval = 1f / SampleRate;
-        float deltaDistance = Distance - prevDistance;
+        float deltaDistance = Distance; // - prevDistance;
 
         // 根据距离变化判断呼吸方向
         // if (deltaDistance > MovementThreshold && !isIncreasing)
