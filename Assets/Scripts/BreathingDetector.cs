@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class BreathingDetector : MonoBehaviour
 {
@@ -13,10 +14,10 @@ public class BreathingDetector : MonoBehaviour
     public int UnstableTolerance = 5;
     
     public float ProtectionDuration = 5f;
-    private int unstableCount = 0;
+    public int unstableCount = 0;
     private float protectionTime = 0f; // = unstableCount * ProtectionDuration
     
-    private int unstableToleranceCount = 0;
+    public int unstableToleranceCount = 0;
     public float SampleRate = 10f;              // 采样频率（Hz）
     private float sampleInterval;
 
@@ -139,6 +140,7 @@ public class BreathingDetector : MonoBehaviour
                 return;
             }
             OnUnstableRegular.Invoke();
+            protectionTime = ProtectionDuration;
             unstableToleranceCount += 1;
             if (unstableToleranceCount >= UnstableTolerance)
             {

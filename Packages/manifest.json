@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "com.meta.xr.sdk.all": "71.0.0",
+    "com.pimdewitte.unitymainthreaddispatcher": "git@github.com:PimDeWitte/UnityMainThreadDispatcher.git",
     "com.unity.collab-proxy": "2.4.4",
     "com.unity.device-simulator.devices": "1.0.0",
     "com.unity.ide.rider": "3.0.31",
