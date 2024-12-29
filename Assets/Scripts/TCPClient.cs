@@ -14,7 +14,7 @@ public class TCPClient : MonoBehaviour
 {
     [SerializeField] private string tcpIp = "127.0.0.1"; // 服务器 IP
     [SerializeField] private int tcpPort = 5555; // 服务器端口
-    [SerializeField] private MonoScript componentScript;
+    [SerializeField] private string componentScript = "BreathingDetector";
     [SerializeField] private List<GameObject> gameObjects = new List<GameObject>();
 
     private Socket clientSocket;
@@ -195,7 +195,7 @@ public class TCPClient : MonoBehaviour
             return;
         }
 
-        Type componentType = componentScript.GetClass();
+        Type componentType = Type.GetType(componentScript);
         if (componentType == null)
         {
             Debug.LogWarning("获取类型失败，请确认拖拽的脚本是否为可用的 Component 类型。");
