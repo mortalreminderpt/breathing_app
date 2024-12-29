@@ -60,7 +60,8 @@ public class BreathingGameController : MonoBehaviour
     {
         if (OVRInput.GetUp(OVRInput.RawButton.RHandTrigger) 
             || OVRInput.GetUp(OVRInput.RawButton.LHandTrigger)
-            || Input.GetKeyUp(KeyCode.Return))
+            || Input.GetKeyUp(KeyCode.Return)
+            || Input.GetMouseButtonUp(0))
         {
             OnVideoFinished(null);
         }

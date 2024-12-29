@@ -27,7 +27,8 @@ public class StartGame : MonoBehaviour
     {
         if (OVRInput.GetUp(OVRInput.RawButton.RHandTrigger) 
             || OVRInput.GetUp(OVRInput.RawButton.LHandTrigger)
-            || Input.GetKeyUp(KeyCode.Return))
+            || Input.GetKeyUp(KeyCode.Return)
+            || Input.GetMouseButtonUp(0))
         {
             SceneManager.LoadScene("Stage1Scene");
         }

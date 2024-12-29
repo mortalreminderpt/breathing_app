@@ -86,7 +86,6 @@ public class BreathingDetector : MonoBehaviour
         }
         sampleInterval = 1f / SampleRate;
         float deltaDistance = Distance - prevDistance;
-        prevDistance = Distance;
 
         // 根据距离变化判断呼吸方向
         // if (deltaDistance > MovementThreshold && !isIncreasing)
@@ -94,12 +93,14 @@ public class BreathingDetector : MonoBehaviour
         {
             // isIncreasing = true;
             OnBreathPhaseChange(BreathingState.Inhaling);
+            prevDistance = Distance;
         }
         // else if (deltaDistance < -MovementThreshold && isIncreasing)
         else if (deltaDistance < -MovementThreshold && currentState != BreathingState.Exhaling)
         {
             // isIncreasing = false;
             OnBreathPhaseChange(BreathingState.Exhaling);
+            prevDistance = Distance;
         }
     }
 

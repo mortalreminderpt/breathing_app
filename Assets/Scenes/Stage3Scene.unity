@@ -1202,6 +1202,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5394105316746400769, guid: ff39919eae895074988176048384e1d4,
         type: 3}
+      propertyPath: MaxBreathTime
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5394105316746400769, guid: ff39919eae895074988176048384e1d4,
+        type: 3}
+      propertyPath: MinBreathTime
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5394105316746400769, guid: ff39919eae895074988176048384e1d4,
+        type: 3}
+      propertyPath: MovementThreshold
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5394105316746400769, guid: ff39919eae895074988176048384e1d4,
+        type: 3}
       propertyPath: UnstableTolerance
       value: 5
       objectReference: {fileID: 0}
@@ -2316,7 +2331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88da68b914d5b5647b1e02ec6dd5a3a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countdownTime: 5
+  countdownTime: 80
   autoStart: 1
   autoRestart: 0
   onTimerStart:
