@@ -27,6 +27,15 @@ public class BreathingDetector : MonoBehaviour
     // 采样相关
     private float prevDistance = 0f;
     // private bool isIncreasing = false;
+    // filter
+    public bool enableFilter = true;
+    public float filteredValue = 0f;
+
+    // 调节速率参数
+    public float alpha = 0.01f; // 更新背景的学习率，越小越慢
+    public float filterThreshold = 0.5f; // 干扰检测的阈值，依据实际情况调整
+    // 滤波变量
+    private float background = 0f; // 背景基线
 
     // 呼吸计时
     private float breathStartTime = 0f;        
@@ -38,8 +47,7 @@ public class BreathingDetector : MonoBehaviour
     public UnityEvent OnBreathingTooFast;
     public UnityEvent OnUnstableRegular;
     public UnityEvent OnUnstableTolerance;
-
-
+    
     // ======= 对外接口 =======
 
     // 获取当前呼吸状态
@@ -80,17 +88,31 @@ public class BreathingDetector : MonoBehaviour
     {                
         protectionTime -= Time.deltaTime;
         float deltaDistance = Distance; // - prevDistance;
+        filteredValue = deltaDistance;
+        if (enableFilter)
+        {
+            // 自适应背景减法
+            float delta = Mathf.Abs(deltaDistance - background);
+            if (delta < filterThreshold)
+            {
+                // 更新背景值（平滑处理）
+                background = Mathf.Lerp(background, deltaDistance, alpha);
+            }
+
+            // 计算滤波后的值
+            filteredValue = deltaDistance - background;
+        }
 
         // 根据距离变化判断呼吸方向
         // if (deltaDistance > MovementThreshold && !isIncreasing)
-        if (deltaDistance > MovementThreshold && currentState != BreathingState.Inhaling)
+        if (filteredValue > MovementThreshold && currentState != BreathingState.Inhaling)
         {
             // isIncreasing = true;
             OnBreathPhaseChange(BreathingState.Inhaling);
             prevDistance = Distance;
         }
         // else if (deltaDistance < -MovementThreshold && isIncreasing)
-        else if (deltaDistance < -MovementThreshold && currentState != BreathingState.Exhaling)
+        else if (filteredValue < -MovementThreshold && currentState != BreathingState.Exhaling)
         {
             // isIncreasing = false;
             OnBreathPhaseChange(BreathingState.Exhaling);
