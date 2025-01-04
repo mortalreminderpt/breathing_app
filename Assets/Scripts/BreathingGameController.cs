@@ -1,5 +1,6 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using TMPro;
 using UnityEngine.Events;
@@ -55,6 +56,9 @@ public class BreathingGameController : MonoBehaviour
 
     private int numUnstable = 0;
     private int numBreathing = 0;
+    
+    public string componentScript = "ReloadCounter";
+    public List<GameObject> gameObjects = new List<GameObject>();
 
     void Update()
     {
@@ -252,5 +256,48 @@ public class BreathingGameController : MonoBehaviour
     public void LoadScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
+    }
+
+    public void TryLoadScene(string sceneName)
+    {
+        FindObjects();
+        if (gameObjects.All(obj => obj.GetComponent<ReloadCounter>().CanReload()))
+        {
+            gameObjects.ForEach(obj => obj.GetComponent<ReloadCounter>().Reload());
+            SceneManager.LoadScene(sceneName);
+        }
+    }
+    
+    private void FindObjects()
+    {
+        gameObjects = new List<GameObject>();
+        if (componentScript == null)
+        {
+            Debug.LogWarning("请在 Inspector 面板中指定一个 MonoScript 对象！");
+            return;
+        }
+
+        Type componentType = Type.GetType(componentScript);
+        if (componentType == null)
+        {
+            Debug.LogWarning("获取类型失败，请确认拖拽的脚本是否为可用的 Component 类型。");
+            return;
+        }
+
+        // 2. 在场景中查找所有该类型的对象
+        Component[] foundComponents = FindObjectsOfType(componentType) as Component[];
+        if (foundComponents == null || foundComponents.Length == 0)
+        {
+            Debug.Log("场景中没有找到此类型的任何组件");
+            return;
+        }
+
+        foreach (var comp in foundComponents)
+        {
+            if (comp != null)
+            {
+                gameObjects.Add(comp.gameObject);
+            }
+        }
     }
 }

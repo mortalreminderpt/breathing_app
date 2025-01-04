@@ -160,7 +160,6 @@ public class BreathingDetector : MonoBehaviour
             {
                 return;
             }
-            OnUnstableRegular.Invoke();
             protectionTime = ProtectionDuration;
             unstableToleranceCount += 1;
             if (unstableToleranceCount >= UnstableTolerance)
@@ -171,6 +170,10 @@ public class BreathingDetector : MonoBehaviour
                 // Mushroom.GetComponent<MushroomController>().Reset();
                 // Tree.GetComponent<DropController>().Reset();
                 // Reset();
+            }
+            else
+            {
+                OnUnstableRegular.Invoke();
             }
             if (duration < MinBreathTime)
             {

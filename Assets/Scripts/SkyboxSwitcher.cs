@@ -9,7 +9,7 @@ public class SkyboxSwitcher : MonoBehaviour
     public List<Light> dayLights;
 
     private float targetTimeOfDay;
-    private float transitionSpeed = 0.5f; // 控制过渡速度
+    private float transitionSpeed = 0.1f; // 控制过渡速度
 
     void Start()
     {
