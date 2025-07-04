@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -62,10 +63,10 @@ public class BreathingGameController : MonoBehaviour
 
     void Update()
     {
-        if (OVRInput.GetUp(OVRInput.RawButton.RHandTrigger) 
-            || OVRInput.GetUp(OVRInput.RawButton.LHandTrigger)
-            || Input.GetKeyUp(KeyCode.Return)
-            || Input.GetMouseButtonUp(0))
+        if (OVRInput.GetUp(OVRInput.RawButton.RHandTrigger)
+             || OVRInput.GetUp(OVRInput.RawButton.LHandTrigger)
+             || Input.GetKeyUp(KeyCode.Return)
+             || Input.GetMouseButtonUp(0) && SceneManager.GetActiveScene().name != "StartScene")
         {
             OnVideoFinished(null);
         }
@@ -299,5 +300,36 @@ public class BreathingGameController : MonoBehaviour
                 gameObjects.Add(comp.gameObject);
             }
         }
+    }
+
+    public void SetDifficulty(int difficulty)
+    {
+        GameStateHolder.Instance.SelectedDifficulty = difficulty;
+        Debug.Log($"[SetDifficulty] Level = {difficulty}");
+    }
+    
+    public void LoadIntermediate()
+    {
+        StartCoroutine(LoadWithDifficultyDelayed(4, "Stage1Scene"));
+    }
+
+    public void LoadExpert()
+    {
+        StartCoroutine(LoadWithDifficultyDelayed(3, "Stage1Scene"));
+    }
+    
+    public void LoadBeginner()
+    {
+        StartCoroutine(LoadWithDifficultyDelayed(50, "Stage1Scene"));
+    }
+
+    private IEnumerator LoadWithDifficultyDelayed(int difficulty, string sceneName)
+    {
+        GameStateHolder.Instance.SelectedDifficulty = difficulty;
+        Debug.Log($"[SetDifficulty] Level = {difficulty}");
+
+        yield return null; // 延迟一帧，确保 static 值被 Unity 内部正确写入
+
+        SceneManager.LoadScene(sceneName);
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -44,6 +45,8 @@ public class LifeManager : MonoBehaviour
         if (Instance && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
         InitIcons();
+        print(GameStateHolder.Instance.SelectedDifficulty);
+        maxLives = GameStateHolder.Instance.SelectedDifficulty;
         SetLives(maxLives, false); // 初始满血
     }
     #endregion
