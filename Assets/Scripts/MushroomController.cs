@@ -23,7 +23,12 @@ public class MushroomController : MonoBehaviour
     {
         _presetPosition = PresetTransform.localPosition;
         _presetLocalScale = PresetTransform.localScale;
-        Reset();
+        _currentScale = 0;
+        _targetScale = 0;
+        // Reset();
+        gameObject.transform.localPosition = _presetPosition;
+        gameObject.transform.localScale = Vector3.zero;
+        canScale = false;
     }
 
     void Update()
