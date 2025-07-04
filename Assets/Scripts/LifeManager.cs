@@ -44,9 +44,9 @@ public class LifeManager : MonoBehaviour
         // 保证场景内唯一
         if (Instance && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
-        InitIcons();
         print(GameStateHolder.Instance.SelectedDifficulty);
         maxLives = GameStateHolder.Instance.SelectedDifficulty;
+        InitIcons();
         SetLives(maxLives, false); // 初始满血
     }
     #endregion
