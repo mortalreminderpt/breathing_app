@@ -6,10 +6,10 @@ using UnityEngine.UI; // 引入UI命名空间，用于操作Slider
 public class ProgressSlider : MonoBehaviour
 {
     public Slider slider; // 用于控制进度的Slider
-    public float progressSpeed = 0.2f; // 每秒进度增长速度
+    public float progressSpeed = 0.25f; // 每秒进度增长速度
 
     private float progress = 0f;
-    private float resetInterval = 5f; // 重置时间间隔
+    private float resetInterval = 4f; // 重置时间间隔
     private float timer = 0f;
 
     void Start()
