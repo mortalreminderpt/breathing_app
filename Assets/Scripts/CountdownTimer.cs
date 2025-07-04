@@ -11,7 +11,7 @@ public class CountdownTimer : MonoBehaviour
     public UnityEvent onTimerReset;
     public UnityEvent onTimerComplete;        // 倒计时完成时会触发的事件
 
-    public float currentTime;                // 当前剩余时间
+    public float currentTime = 0;                // 当前剩余时间
     private bool isRunning = false;           // 是否在计时中
     private SceneManager sceneManager;
 
@@ -21,7 +21,7 @@ public class CountdownTimer : MonoBehaviour
     public void StartTimer()
     {
         onTimerStart.Invoke();
-        currentTime = countdownTime;
+        currentTime = currentTime + countdownTime;
         isRunning = true;
     }
 
