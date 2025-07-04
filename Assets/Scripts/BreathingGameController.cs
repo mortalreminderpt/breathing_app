@@ -63,10 +63,11 @@ public class BreathingGameController : MonoBehaviour
 
     void Update()
     {
-        if (OVRInput.GetUp(OVRInput.RawButton.RHandTrigger)
+        if ((OVRInput.GetUp(OVRInput.RawButton.RHandTrigger)
              || OVRInput.GetUp(OVRInput.RawButton.LHandTrigger)
              || Input.GetKeyUp(KeyCode.Return)
-             || Input.GetMouseButtonUp(0) && SceneManager.GetActiveScene().name != "StartScene")
+             || Input.GetMouseButtonUp(0))
+            && SceneManager.GetActiveScene().name != "StartScene" && SceneManager.GetActiveScene().name != "Stage2Scene")
         {
             OnVideoFinished(null);
         }
