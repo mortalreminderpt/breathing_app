@@ -301,7 +301,7 @@ public class BreathingGameController : MonoBehaviour
 
     public void SetDifficulty(int difficulty)
     {
-        GameStateHolder.Instance.SelectedDifficulty = difficulty;
+        GameStateHolder.Instance.SetDifficulty(difficulty);
         Debug.Log($"[SetDifficulty] Level = {difficulty}");
     }
     
@@ -322,7 +322,7 @@ public class BreathingGameController : MonoBehaviour
 
     private IEnumerator LoadWithDifficultyDelayed(int difficulty, string sceneName)
     {
-        GameStateHolder.Instance.SelectedDifficulty = difficulty;
+        GameStateHolder.Instance.SetDifficulty(difficulty);
         Debug.Log($"[SetDifficulty] Level = {difficulty}");
 
         yield return null; // 延迟一帧，确保 static 值被 Unity 内部正确写入

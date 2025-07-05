@@ -3118,6 +3118,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SelectedDifficulty: 5
+  blueProfile: {fileID: 11400000, guid: e044fe8695cde4a43ba6421881450f04, type: 2}
+  redProfile: {fileID: 11400000, guid: 2b2e3119217463b41a5003617c9f5769, type: 2}
+  yellowProfile: {fileID: 11400000, guid: adeee6c273248a94b854e8b36df46774, type: 2}
 --- !u!4 &679295166
 Transform:
   m_ObjectHideFlags: 0
