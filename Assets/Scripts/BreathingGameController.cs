@@ -298,12 +298,6 @@ public class BreathingGameController : MonoBehaviour
             }
         }
     }
-
-    public void SetDifficulty(int difficulty)
-    {
-        GameStateHolder.Instance.SetDifficulty(difficulty);
-        Debug.Log($"[SetDifficulty] Level = {difficulty}");
-    }
     
     public void LoadIntermediate()
     {

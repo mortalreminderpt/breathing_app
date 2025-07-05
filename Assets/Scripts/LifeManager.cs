@@ -47,7 +47,7 @@ public class LifeManager : MonoBehaviour
         print(GameStateHolder.Instance.SelectedDifficulty);
         maxLives = GameStateHolder.Instance.SelectedDifficulty;
         InitIcons();
-        SetLives(maxLives, false); // 初始满血
+        SetLives(GameStateHolder.Instance.GetHealth(), false); // 初始满血
     }
     #endregion
 
@@ -79,6 +79,7 @@ public class LifeManager : MonoBehaviour
             currentLives = 0;
             OnGameOver?.Invoke();
         }
+        GameStateHolder.Instance.SetHealth(currentLives);
     }
     #endregion
 }

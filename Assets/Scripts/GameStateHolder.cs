@@ -10,6 +10,9 @@ public class GameStateHolder : MonoBehaviour
     [Header("Difficulty (5=Blue, 4=Red, 3=Yellow)")]
     public int SelectedDifficulty = 5;
 
+    [Header("Player Health")] 
+    [SerializeField] private int currentHealth;// 当前血量
+
     [Header("Post-Processing Profiles")]
     public VolumeProfile blueProfile;
     public VolumeProfile redProfile;
@@ -28,6 +31,8 @@ public class GameStateHolder : MonoBehaviour
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        currentHealth = SelectedDifficulty;             // 启动时满血
 
         // 监听场景加载
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -49,12 +54,26 @@ public class GameStateHolder : MonoBehaviour
     }
 
     #region ★ 外部 API
+    // ===== 难度 =====
     public void SetDifficulty(int level)
     {
-        if (level == SelectedDifficulty) return;
         SelectedDifficulty = level;
+        currentHealth = SelectedDifficulty;
         ApplyDifficulty();          // 立即刷新当前场景
     }
+
+    // ===== 血量 =====
+    public int GetHealth() => currentHealth;
+
+    public void SetHealth(int value)
+    {
+        currentHealth = Mathf.Clamp(value, 0, SelectedDifficulty);
+        // TODO：在此处触发 UI 刷新或事件
+    }
+
+    public void ChangeHealth(int delta) => SetHealth(currentHealth + delta);
+
+    public bool IsDead => currentHealth <= 0;
     #endregion
 
     #region ★ 内部逻辑
