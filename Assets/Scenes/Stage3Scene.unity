@@ -5231,12 +5231,12 @@ PrefabInstance:
     - target: {fileID: 5394105316746400769, guid: ff39919eae895074988176048384e1d4,
         type: 3}
       propertyPath: MaxBreathTime
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5394105316746400769, guid: ff39919eae895074988176048384e1d4,
         type: 3}
       propertyPath: MinBreathTime
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5394105316746400769, guid: ff39919eae895074988176048384e1d4,
         type: 3}
