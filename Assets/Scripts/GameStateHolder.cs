@@ -130,6 +130,7 @@ public class GameStateHolder : MonoBehaviour
 
     private void ApplyDifficulty()
     {
+        if (SceneManager.GetActiveScene().name == "StartScene") return;
         // === 蘑菇显隐 ===
         blueMushroom?.SetActive(false);
         redMushroom?.SetActive(false);
