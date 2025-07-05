@@ -6267,7 +6267,7 @@ MonoBehaviour:
         m_MethodName: set_clip
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 8300000, guid: c0384381fcf5fe145bb1ac156ced4e48,
+          m_ObjectArgument: {fileID: 8300000, guid: bbaf1c46d6b818b49a3cac6382fa8945,
             type: 3}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
           m_IntArgument: 0
@@ -6283,7 +6283,7 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
-          m_FloatArgument: 1.6
+          m_FloatArgument: 0.4
           m_StringArgument: Drop
           m_BoolArgument: 0
         m_CallState: 2
