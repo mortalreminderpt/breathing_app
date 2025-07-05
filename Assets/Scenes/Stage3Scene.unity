@@ -5277,7 +5277,7 @@ PrefabInstance:
         type: 3}
       propertyPath: OnUnstableRegular.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1075206427}
     - target: {fileID: 5394105316746400769, guid: ff39919eae895074988176048384e1d4,
         type: 3}
       propertyPath: OnUnstableTolerance.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -5342,7 +5342,7 @@ PrefabInstance:
         type: 3}
       propertyPath: OnUnstableTolerance.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1075206427}
     - target: {fileID: 5394105316746400769, guid: ff39919eae895074988176048384e1d4,
         type: 3}
       propertyPath: OnUnstableTolerance.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -7311,7 +7311,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: StartScene
+          m_StringArgument: WinScene
           m_BoolArgument: 0
         m_CallState: 2
   currentTime: 0

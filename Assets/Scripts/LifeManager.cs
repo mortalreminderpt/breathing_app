@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// 场景常驻的生命系统（可挂在空 GameObject 上）
@@ -44,8 +45,7 @@ public class LifeManager : MonoBehaviour
         // 保证场景内唯一
         if (Instance && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
-        print(GameStateHolder.Instance.SelectedDifficulty);
-        maxLives = GameStateHolder.Instance.SelectedDifficulty;
+        maxLives = GameStateHolder.Instance.MaxHealth;
         InitIcons();
         SetLives(GameStateHolder.Instance.GetHealth(), false); // 初始满血
     }
@@ -77,7 +77,17 @@ public class LifeManager : MonoBehaviour
         {
             // 清一次，防止重复 GameOver
             currentLives = 0;
-            OnGameOver?.Invoke();
+            if (GameStateHolder.Instance.MaxHealth > 0)
+            {
+                GameStateHolder.Instance.MaxHealth--;
+                currentLives = GameStateHolder.Instance.MaxHealth;
+                SceneManager.LoadScene("Stage2Scene");
+            }
+
+            if (GameStateHolder.Instance.MaxHealth == 0)
+            {
+                OnGameOver?.Invoke();
+            }
         }
         GameStateHolder.Instance.SetHealth(currentLives);
     }

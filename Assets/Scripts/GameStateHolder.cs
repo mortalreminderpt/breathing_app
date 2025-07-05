@@ -10,6 +10,8 @@ public class GameStateHolder : MonoBehaviour
     [Header("Difficulty (5=Blue, 4=Red, 3=Yellow)")]
     public int SelectedDifficulty = 5;
 
+    public int MaxHealth = -1;
+
     [Header("Player Health")] 
     [SerializeField] private int currentHealth;// 当前血量
 
@@ -46,7 +48,12 @@ public class GameStateHolder : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        currentHealth = SelectedDifficulty;             // 启动时满血
+        if (MaxHealth < 0)
+        {
+            MaxHealth = SelectedDifficulty;
+        }
+
+        currentHealth = MaxHealth;             // 启动时满血
         elapsedSinceDifficultyChange = 0f;              // 初始化计时器
 
         // 监听场景加载
@@ -64,6 +71,10 @@ public class GameStateHolder : MonoBehaviour
     // ★ 新增：每帧累加计时
     private void Update()
     {
+        if (MaxHealth < 0)
+        {
+            MaxHealth = SelectedDifficulty;
+        }
         if (!timerPaused)
             elapsedSinceDifficultyChange += Time.deltaTime;
     }
@@ -80,7 +91,8 @@ public class GameStateHolder : MonoBehaviour
     public void SetDifficulty(int level)
     {
         SelectedDifficulty = level;
-        currentHealth = SelectedDifficulty;
+        MaxHealth = SelectedDifficulty;
+        currentHealth = MaxHealth;
 
         elapsedSinceDifficultyChange = 0f;
         timerPaused = false;          // 切换难度时自动重新开始计时
@@ -93,7 +105,7 @@ public class GameStateHolder : MonoBehaviour
 
     public void SetHealth(int value)
     {
-        currentHealth = Mathf.Clamp(value, 0, SelectedDifficulty);
+        currentHealth = Mathf.Clamp(value, 0, MaxHealth);
         // TODO：在此处触发 UI 刷新或事件
     }
 
