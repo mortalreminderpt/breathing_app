@@ -321,7 +321,7 @@ public class BreathingGameController : MonoBehaviour
     
     public void LoadBeginner()
     {
-        StartCoroutine(LoadWithDifficultyDelayed(50, "Stage1Scene"));
+        StartCoroutine(LoadWithDifficultyDelayed(5, "Stage1Scene"));
     }
 
     private IEnumerator LoadWithDifficultyDelayed(int difficulty, string sceneName)

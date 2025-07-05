@@ -57,6 +57,38 @@ public class MushroomController : MonoBehaviour
         transform.localPosition = _currentPosition;
 
         canScale = false;
+        ActivateMushroomByDifficulty();
+    }
+    
+    void ActivateMushroomByDifficulty()
+    {
+        Transform blue = transform.Find("BlueMushroom");
+        Transform red = transform.Find("RedMushroom");
+        Transform yellow = transform.Find("YellowMushroom");
+
+        // 先全部禁用
+        blue.gameObject.SetActive(false);
+        red.gameObject.SetActive(false);
+        yellow.gameObject.SetActive(false);
+
+        switch (GameStateHolder.Instance.SelectedDifficulty)
+        {
+            case 5:
+                Debug.Log("难度5");
+                blue.gameObject.SetActive(true);
+                break;
+            case 4:
+                Debug.Log("难度4");
+                red.gameObject.SetActive(true);
+                break;
+            case 3:
+                Debug.Log("难度3");
+                yellow.gameObject.SetActive(true);
+                break;
+            default:
+                Debug.LogWarning("未识别的难度等级");
+                break;
+        }
     }
 
     void Update()
