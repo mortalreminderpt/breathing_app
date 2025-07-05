@@ -42,7 +42,20 @@ public class GameHUD : MonoBehaviour
         {
             cachedDifficulty = gs.SelectedDifficulty;
             if (levelText != null)
-                levelText.text = $"Level: {cachedDifficulty}";
+            {
+                switch (cachedDifficulty)
+                {
+                    case 3:
+                        levelText.text = "Expert";
+                        break;
+                    case 4:
+                        levelText.text = "Intermediate";
+                        break;
+                    case 5:
+                        levelText.text = "Beginner";
+                        break;
+                }
+            }
         }
 
         // ===== 血量 =====
@@ -51,7 +64,7 @@ public class GameHUD : MonoBehaviour
         {
             cachedHealth = health;
             if (liveText != null)
-                liveText.text = $"Live: {cachedHealth}";
+                liveText.text = $"{cachedHealth}";
         }
     }
     #endregion
