@@ -6,11 +6,17 @@ public class GameHUD : MonoBehaviour
     [Header("TMP Text References (Optional)")]
     [SerializeField] private TMP_Text levelText;   // 难度
     [SerializeField] private TMP_Text liveText;    // 血量
+    #region ★ 新增：计时文本
+    [SerializeField] private TMP_Text timeText;    // 距上次改难度已过时间
+    #endregion
 
     private int cachedDifficulty = -1;
     private int cachedHealth     = -1;
+    #region
+    private int cachedSeconds    = -1;
+    #endregion
 
-    #region ★ 生命周期
+    #region
     private void Awake()
     {
         // 若未在 Inspector 指定，则按约定名称在子层级中查找
@@ -24,6 +30,13 @@ public class GameHUD : MonoBehaviour
             var t = transform.Find("Live");
             if (t != null) liveText = t.GetComponent<TMP_Text>();
         }
+        #region ★ 新增：自动查找 Time
+        if (timeText == null)
+        {
+            var t = transform.Find("Time");
+            if (t != null) timeText = t.GetComponent<TMP_Text>();
+        }
+        #endregion
     }
 
     private void Start() => Refresh(force: true);
@@ -45,15 +58,9 @@ public class GameHUD : MonoBehaviour
             {
                 switch (cachedDifficulty)
                 {
-                    case 3:
-                        levelText.text = "Expert";
-                        break;
-                    case 4:
-                        levelText.text = "Intermediate";
-                        break;
-                    case 5:
-                        levelText.text = "Beginner";
-                        break;
+                    case 3: levelText.text = "Expert";        break;
+                    case 4: levelText.text = "Intermediate";  break;
+                    case 5: levelText.text = "Beginner";      break;
                 }
             }
         }
@@ -66,6 +73,22 @@ public class GameHUD : MonoBehaviour
             if (liveText != null)
                 liveText.text = $"{cachedHealth}";
         }
+
+        #region
+        GameStateHolder.Instance.PauseDifficultyTimer();
+        int seconds = Mathf.FloorToInt(gs.TimeSinceDifficultyChange);
+        if (force || seconds != cachedSeconds)
+        {
+            cachedSeconds = seconds;
+
+            if (timeText != null)
+            {
+                int mm = seconds / 60;
+                int ss = seconds % 60;
+                timeText.text = $"{mm:00}:{ss:00}";
+            }
+        }
+        #endregion
     }
     #endregion
 }

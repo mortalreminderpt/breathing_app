@@ -13,6 +13,20 @@ public class GameStateHolder : MonoBehaviour
     [Header("Player Health")] 
     [SerializeField] private int currentHealth;// 当前血量
 
+    #region ★ 新增：计时器
+    [Header("⏱ Time Since Difficulty Change")]
+    [SerializeField] private float elapsedSinceDifficultyChange = 0f;  // 距上次修改难度已过秒数
+    public  float TimeSinceDifficultyChange => elapsedSinceDifficultyChange;    // 只读访问
+    #endregion
+    
+    #region 计时器暂停开关
+    private bool timerPaused = false;
+    public  bool TimerPaused => timerPaused;                 // 外部可读
+    public  void PauseDifficultyTimer()  => timerPaused = true;
+    public  void ResumeDifficultyTimer() => timerPaused = false;
+    #endregion
+
+
     [Header("Post-Processing Profiles")]
     public VolumeProfile blueProfile;
     public VolumeProfile redProfile;
@@ -33,6 +47,7 @@ public class GameStateHolder : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         currentHealth = SelectedDifficulty;             // 启动时满血
+        elapsedSinceDifficultyChange = 0f;              // 初始化计时器
 
         // 监听场景加载
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -45,6 +60,13 @@ public class GameStateHolder : MonoBehaviour
             SceneManager.sceneLoaded -= OnSceneLoaded;
     }
     #endregion
+
+    // ★ 新增：每帧累加计时
+    private void Update()
+    {
+        if (!timerPaused)
+            elapsedSinceDifficultyChange += Time.deltaTime;
+    }
 
     // 第一关载入后，SceneManager 会回调一次 OnSceneLoaded，所以 Start 不再必须
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -59,6 +81,10 @@ public class GameStateHolder : MonoBehaviour
     {
         SelectedDifficulty = level;
         currentHealth = SelectedDifficulty;
+
+        elapsedSinceDifficultyChange = 0f;
+        timerPaused = false;          // 切换难度时自动重新开始计时
+
         ApplyDifficulty();          // 立即刷新当前场景
     }
 

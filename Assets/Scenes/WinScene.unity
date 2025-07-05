@@ -1095,6 +1095,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelText: {fileID: 501729440}
   liveText: {fileID: 1650791152}
+  timeText: {fileID: 987333585}
 --- !u!21 &391189430
 Material:
   serializedVersion: 8
@@ -3327,6 +3328,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SelectedDifficulty: 5
   currentHealth: 0
+  elapsedSinceDifficultyChange: 0
   blueProfile: {fileID: 0}
   redProfile: {fileID: 0}
   yellowProfile: {fileID: 0}
