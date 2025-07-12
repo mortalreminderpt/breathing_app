@@ -3118,6 +3118,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SelectedDifficulty: 5
+  MaxHealth: -1
+  currentHealth: 0
+  elapsedSinceDifficultyChange: 0
   blueProfile: {fileID: 11400000, guid: e044fe8695cde4a43ba6421881450f04, type: 2}
   redProfile: {fileID: 11400000, guid: 2b2e3119217463b41a5003617c9f5769, type: 2}
   yellowProfile: {fileID: 11400000, guid: adeee6c273248a94b854e8b36df46774, type: 2}
@@ -5118,7 +5121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 014c3ef26237240c0967936fec68b32f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tcpIp: 172.20.10.3
+  tcpIp: 172.20.10.2
   tcpPort: 5555
   componentScript: BreathingDetector
   gameObjects: []
