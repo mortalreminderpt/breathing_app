@@ -63,7 +63,7 @@ public class BreathingGameController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0) || OVRInput.GetUp(OVRInput.Button.One))
         {
             OnVideoFinished(null);
         }
