@@ -978,7 +978,7 @@ RectTransform:
   m_Father: {fileID: 1864748123}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2705,7 +2705,7 @@ RectTransform:
   m_Father: {fileID: 1687374720}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -3174,7 +3174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88da68b914d5b5647b1e02ec6dd5a3a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countdownTime: 64
+  countdownTime: 80
   autoStart: 1
   autoRestart: 0
   onTimerStart:
@@ -3247,7 +3247,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88da68b914d5b5647b1e02ec6dd5a3a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countdownTime: 32
+  countdownTime: 40
   autoStart: 1
   autoRestart: 0
   onTimerStart:
@@ -5231,7 +5231,7 @@ PrefabInstance:
     - target: {fileID: 5394105316746400769, guid: ff39919eae895074988176048384e1d4,
         type: 3}
       propertyPath: MaxBreathTime
-      value: 5
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5394105316746400769, guid: ff39919eae895074988176048384e1d4,
         type: 3}
@@ -5251,7 +5251,7 @@ PrefabInstance:
     - target: {fileID: 5394105316746400769, guid: ff39919eae895074988176048384e1d4,
         type: 3}
       propertyPath: ProtectionDuration
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5394105316746400769, guid: ff39919eae895074988176048384e1d4,
         type: 3}
@@ -6238,7 +6238,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88da68b914d5b5647b1e02ec6dd5a3a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countdownTime: 8
+  countdownTime: 10
   autoStart: 1
   autoRestart: 1
   onTimerStart:
@@ -6287,7 +6287,7 @@ MonoBehaviour:
           m_StringArgument: Drop
           m_BoolArgument: 0
         m_CallState: 2
-  currentTime: -4
+  currentTime: -5
 --- !u!4 &906366939
 Transform:
   m_ObjectHideFlags: 0
@@ -7527,7 +7527,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88da68b914d5b5647b1e02ec6dd5a3a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countdownTime: 16
+  countdownTime: 20
   autoStart: 1
   autoRestart: 0
   onTimerStart:
@@ -7564,7 +7564,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88da68b914d5b5647b1e02ec6dd5a3a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countdownTime: 8
+  countdownTime: 10
   autoStart: 1
   autoRestart: 0
   onTimerStart:
@@ -8151,13 +8151,14 @@ GameObject:
   - component: {fileID: 1531965145}
   - component: {fileID: 1531965147}
   - component: {fileID: 1531965146}
+  - component: {fileID: 1531965148}
   m_Layer: 5
   m_Name: Progress Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1531965145
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8187,7 +8188,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1531965144}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 80fa846e767a14862a8cc0671bbc7f93, type: 3}
   m_Name: 
@@ -8245,6 +8246,20 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1531965148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1531965144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 379506853a7622d46a7d7a2017f467fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slider: {fileID: 1531965147}
+  halfCycle: 5
 --- !u!1 &1539270671
 GameObject:
   m_ObjectHideFlags: 0
