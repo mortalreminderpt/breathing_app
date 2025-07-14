@@ -3174,7 +3174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88da68b914d5b5647b1e02ec6dd5a3a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countdownTime: 80
+  countdownTime: 60
   autoStart: 1
   autoRestart: 0
   onTimerStart:
@@ -3247,7 +3247,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88da68b914d5b5647b1e02ec6dd5a3a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countdownTime: 40
+  countdownTime: 30
   autoStart: 1
   autoRestart: 0
   onTimerStart:
